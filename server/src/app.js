@@ -7,6 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Routes
+const productRoutes = require('./routes/product');
+
 // Health Check Route
 app.get('/api/health', (req, res) => {
   res.json({
@@ -15,6 +18,8 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use('/api/products', productRoutes);
 
 // Root Route (optional, just to show something)
 app.get('/', (req, res) => {
