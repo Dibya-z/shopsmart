@@ -6,4 +6,10 @@ build
 coverage
 .vercel
 server/prisma/dev.db
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
 coverage/
