@@ -31,8 +31,13 @@ jobs:
 
       - name: Test backend
         working-directory: server
-        run: npm run test
-        continue-on-error: true
+        run: npm run test -- --coverage
+
+      - name: Upload backend coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: server/coverage/
 
       - name: Build backend (if present)
         working-directory: server
@@ -48,7 +53,13 @@ jobs:
 
       - name: Test frontend
         working-directory: client
-        run: npm run test
+        run: npx vitest run --coverage
+
+      - name: Upload frontend coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-report
+          path: client/coverage/
 
       - name: Build frontend
         working-directory: client
