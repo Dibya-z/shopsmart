@@ -27,6 +27,8 @@ jobs:
 
       - name: Setup database
         working-directory: server
+        env:
+          DATABASE_URL: "file:./dev.db"
         run: npx prisma db push
 
       - name: Lint backend
@@ -35,6 +37,8 @@ jobs:
 
       - name: Test backend
         working-directory: server
+        env:
+          DATABASE_URL: "file:./dev.db"
         run: npm run test -- --coverage
 
       - name: Upload backend coverage report
