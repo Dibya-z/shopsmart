@@ -141,7 +141,7 @@ jobs:
       - name: Build, tag and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: shopsmart-backend
+          ECR_REPOSITORY: shopsmart-api
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./server
@@ -152,15 +152,15 @@ jobs:
       - name: Deploy new image to ECS
         run: |
           aws ecs update-service \
-            --cluster shopsmart-cluster \
-            --service shopsmart-backend-service \
+            --cluster shopsmart-ecs-cluster \
+            --service shopsmart-api-service \
             --force-new-deployment \
             --region ${{ secrets.AWS_REGION }}
 
       - name: Verify ECS service is stable
         run: |
           aws ecs wait services-stable \
-            --cluster shopsmart-cluster \
-            --services shopsmart-backend-service \
+            --cluster shopsmart-ecs-cluster \
+            --services shopsmart-api-service \
             --region ${{ secrets.AWS_REGION }}
           echo "✅ ECS service is running and stable!"

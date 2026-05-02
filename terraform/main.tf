@@ -15,7 +15,7 @@ provider "aws" {
 # S3 Bucket
 # ─────────────────────────────────────────────
 resource "aws_s3_bucket" "shopsmart" {
-  bucket = "shopsmart-dibyajyoti-bucket"
+  bucket = "shopsmart-dibyajyoti-bucket-api"
 
   tags = {
     Project     = "ShopSmart"
@@ -64,7 +64,7 @@ resource "aws_s3_bucket_public_access_block" "shopsmart" {
 # ECR Repository (Docker Image Registry)
 # ─────────────────────────────────────────────
 resource "aws_ecr_repository" "shopsmart_backend" {
-  name                 = "shopsmart-backend"
+  name                 = "shopsmart-api"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -81,7 +81,7 @@ resource "aws_ecr_repository" "shopsmart_backend" {
 # ECS Cluster
 # ─────────────────────────────────────────────
 resource "aws_ecs_cluster" "shopsmart" {
-  name = "shopsmart-cluster"
+  name = "shopsmart-ecs-cluster"
 
   tags = {
     Project   = "ShopSmart"
@@ -114,7 +114,7 @@ data "aws_subnets" "default" {
 # Security Group (allow inbound on port 5000)
 # ─────────────────────────────────────────────
 resource "aws_security_group" "shopsmart_backend" {
-  name        = "shopsmart-backend-sg"
+  name        = "shopsmart-api-sg"
   description = "Allow inbound traffic to ShopSmart backend"
   vpc_id      = data.aws_vpc.default.id
 
@@ -152,7 +152,7 @@ resource "aws_ecs_task_definition" "shopsmart_backend" {
 
   container_definitions = jsonencode([
     {
-      name      = "shopsmart-backend"
+      name      = "shopsmart-api"
       image     = "${aws_ecr_repository.shopsmart_backend.repository_url}:latest"
       essential = true
 
@@ -186,7 +186,7 @@ resource "aws_ecs_task_definition" "shopsmart_backend" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = "/ecs/shopsmart-backend"
+          "awslogs-group"         = "/ecs/shopsmart-api"
           "awslogs-region"        = var.aws_region
           "awslogs-stream-prefix" = "ecs"
           "awslogs-create-group"  = "true"
@@ -205,7 +205,7 @@ resource "aws_ecs_task_definition" "shopsmart_backend" {
 # ECS Service (runs the task on Fargate)
 # ─────────────────────────────────────────────
 resource "aws_ecs_service" "shopsmart_backend" {
-  name            = "shopsmart-backend-service"
+  name            = "shopsmart-api-service"
   cluster         = aws_ecs_cluster.shopsmart.id
   task_definition = aws_ecs_task_definition.shopsmart_backend.arn
   desired_count   = 1
