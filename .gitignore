@@ -6,3 +6,4 @@ build
 coverage
 .vercel
 server/prisma/dev.db
+coverage/

@@ -25,6 +25,10 @@ jobs:
         working-directory: server
         run: npm install
 
+      - name: Setup database
+        working-directory: server
+        run: npx prisma db push
+
       - name: Lint backend
         working-directory: server
         run: npm run lint
