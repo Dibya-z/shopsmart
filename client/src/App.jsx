@@ -112,6 +112,7 @@ function App() {
         <AddProductForm onProductAdded={handleProductAdded} />
         
         <h2>Product Catalog</h2>
+        <h1>Heloo just checking </h1>
         {loading ? (
           <p>Loading products...</p>
         ) : products.length > 0 ? (
@@ -122,6 +123,7 @@ function App() {
           </div>
         ) : (
           <p>No products available. Add one above!</p>
+          
         )}
       </main>
     </div>
