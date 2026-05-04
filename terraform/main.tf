@@ -15,7 +15,7 @@ provider "aws" {
 # S3 Bucket
 # ─────────────────────────────────────────────
 resource "aws_s3_bucket" "shopsmart" {
-  bucket = "shopsmart-dibyajyoti-bucket-api"
+  bucket = "shopsmart-dibyajyoti-bucket-new"
 
   tags = {
     Project     = "ShopSmart"
